@@ -92,3 +92,19 @@ but a dust-to-gas ratio of 1e-4:
    t_relax is then t_relax=t_cool/(4+1.6). If the temperature-dependence of the
    Planck-mean opacity kappa_P is not accounted for, you get t_relax=t_cool/4,
    which is what most publications use.
+
+4. Our disk model is super-simple. It is best applicable to the later stages of
+   protoplanetary disk evolution, because it assumes that there is no internal
+   viscous heating, only irradiative heating. The irradiation is also treated
+   in a super-simple way, simply setting the irradiation angle to a constant
+   value of 0.05.
+
+5. We set the adiabatic index gamma=5/3, because we focus on the outer regions
+   of the disk which are cold, so that H_2 rotational degrees of freedom are
+   not excited. Some other works use gamma=7/5.
+
+6. We include the gas-dust coupling time scale, which is often slower (=larger)
+   than the radiative time scale itself and therefore has to be included.
+   Many publications include it too, some do not.
+
+
