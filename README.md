@@ -71,3 +71,20 @@ but a dust-to-gas ratio of 1e-3:
 
     model=coolcalc(mstar=2.4*MS,lstar=50*LS,mdisk=0.1*MS,dtg=1e-4)
 
+## Differences with other publications
+
+1. Most works use the Bell & Lin (1997) opacity model. We use an opacity
+   model derived from the standard opacity of optool (an opacity tool
+   from Carsten Dominik, found at https://github.com/cdominik/optool),
+   which is uses the DIANA standard. This opacity is significantly larger
+   than the Bell & Lin one. But you can switch to the Bell & Lin
+   opacity if you wish.
+
+2. For the wave mode of perturbation used to compute the relaxation time in the
+   optically thick limit, some works use rather high spatial frequencies, such
+   as k_x=50/h_p (where h_p is the pressure scale height). We use k_x=2*pi/h_p,
+   but that can be changed (see khat parameter).
+
+3. We include the dlog(kappa_P)/dlog(T) in the computation of the optically
+   thin relaxation time, which makes it a factor of 1/(1+1.6/4) shorter.
+
