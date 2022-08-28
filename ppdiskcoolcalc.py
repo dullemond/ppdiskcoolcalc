@@ -32,7 +32,7 @@ class coolcalc(object):
                  gamma=1.6666,      # Adiabatic coefficient
                  khat=6.2832,       # The dimensionless k_x for the opt thick relaxation time
                  agrain=1e-5,       # The grain radius in cm
-                 dustmdens=1.97,    # The grain material density in g/cm^3
+                 dustmdens=1.48,    # The grain material density in g/cm^3
                  dtg=1e-2,          # Small grain dust-to-gas ratio
                  opac='default',    # Opacity model. 'default'=standard, 'belllin'=Bell & Lin (1997), 'optool' uses optool
                  optool='optool -c pyr-mg70 0.696 -c c-z 0.104 -m h2o-w 0.2 -a 0.1'
@@ -97,7 +97,7 @@ class coolcalc(object):
           agrain   : default = 1e-1 micron = 1e-5 cm
                      The grain radius [cm]
 
-          dustmdens: default = 1.97 g/cm^3
+          dustmdens: default = 1.48 g/cm^3
                      The dust material density [g/cm^3]
         
           opac     : default = None
