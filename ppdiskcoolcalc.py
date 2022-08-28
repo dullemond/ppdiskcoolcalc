@@ -186,9 +186,9 @@ class coolcalc(object):
         if opac=='default':
             # Use opacity model of Dullemond, Ziampras & Ostertag (2022)
             assert self.agrain<1e-3, 'The opacity model of Dullemond, Ziampras & Ostertag (2022) is only valid for agrain<10 micron.'
-            kapplaw= 1.6
-            kap_p  = (tmid/1.7)**kapplaw
-            kap_r  = (tmid/2.25)**kapplaw
+            kapplaw= 1.7
+            kap_p  = (tmid/2.0)**kapplaw
+            kap_r  = (tmid/2.6)**kapplaw
         elif opac=='belllin':
             # Use opacity model of Bell & Lin
             assert self.agrain<1e-3, 'The Bell & Lin opacity model is only valid for agrain<10 micron.'
