@@ -35,7 +35,7 @@ class coolcalc(object):
                  dustmdens=1.48,    # The grain material density in g/cm^3
                  dtg=1e-2,          # Small grain dust-to-gas ratio
                  opac='default',    # Opacity model. 'default'=standard, 'belllin'=Bell & Lin (1997), 'optool' uses optool
-                 optool='optool -c pyr-mg70 0.696 -c c-z 0.104 -m h2o-w 0.2 -a 0.1'
+                 optool='optool -c pyr-mg70 0.696 -c c-z 0.104 -m h2o-w 0.2 -p 0.25 -a 0.1'
                  ):
         """Tool to compute the cooling time and the relaxation time for
         a protoplanetary disk. Particularly useful for computing where
