@@ -37,8 +37,7 @@ class coolcalc(object):
                  opac='default',    # Opacity model. 'default'=standard, 'belllin'=Bell & Lin (1997), 'optool' uses optool
                  optool='optool -c pyr-mg70 0.696 -c c-z 0.104 -m h2o-w 0.2 -a 0.1'
                  ):
-        """
-        Tool to compute the cooling time and the relaxation time for
+        """Tool to compute the cooling time and the relaxation time for
         a protoplanetary disk. Particularly useful for computing where
         the disk can become unstable to the VSI (Vertical Shear Instability).
 
@@ -131,6 +130,14 @@ class coolcalc(object):
           self.trelax_thick       : The optically thin relaxation time [s]
           self.t_dustgas          : The dust-gas coupling time [s]
           self.kapplaw            : The value of dlog(kappa_P)/dlog(T)
+
+        You can also modify self.sigmag, self.sigmad, and/or self.tmid after the
+        initial call. You then must call self.recompute() to recompute everything.
+        Example:
+
+          model = coolcalc()
+          model.sigmad *= (model.r/(30*au))**(-0.2)
+          model.recompute()
 
         """
         self.mstar     = mstar
@@ -258,3 +265,9 @@ class coolcalc(object):
         self.trelax_thick = trelax_thick
         self.trelax       = trelax_thin + trelax_thick + self.t_dustgas
         self.beta         = self.omk*self.trelax
+
+    def recompute(self):
+        self.mdisk  = (self.sigmag*self.dsurf).sum()
+        self.compute_kepler_cs_hp_cv()
+        self.compute_vsi_trelax_limit()
+        self.compute_cooling_radiative()
