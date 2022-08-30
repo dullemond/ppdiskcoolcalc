@@ -35,7 +35,8 @@ class coolcalc(object):
                  dustmdens=1.48,    # The grain material density in g/cm^3
                  dtg=1e-2,          # Small grain dust-to-gas ratio
                  opac='default',    # Opacity model. 'default'=standard, 'belllin'=Bell & Lin (1997), 'optool' uses optool
-                 optool='optool -c pyr-mg70 0.696 -c c-z 0.104 -m h2o-w 0.2 -p 0.25 -a 0.1'
+                 optool='optool -c pyr-mg70 0.696 -c c-z 0.104 -m h2o-w 0.2 -p 0.25 -a 0.1',
+                 dgcoupl='default'  # The dust-gas coupling computation method
                  ):
         """Tool to compute the cooling time and the relaxation time for
         a protoplanetary disk. Particularly useful for computing where
@@ -100,13 +101,20 @@ class coolcalc(object):
           dustmdens: default = 1.48 g/cm^3
                      The dust material density [g/cm^3]
         
-          opac     : default = None
+          opac     : default = 'default'
                      Opacity model for the small-grained dust. Possibilities:
                       'default': Standard opacity model of the Dullemond, Ziampras,
                                  Ostertag (2022) paper.
                       'belllin': Bell & Lin (1997) opacity model
                       'optool':  Use Carsten Dominik's optool code (see below)
                                  to compute the opacity model
+
+          dgcoupl  : default = 'default'
+                     The method for computing the gas-dust heat exchange rate:
+                      'default': Assume that a gas molecule is immediately
+                                 thermalized when hitting a grain.
+                      'gombosi': Use the Gombosi, Nagy & Cravens (1986) formula,
+                                 which is used also by Desch and Connolly (2002).
   
           optool   : default = 'optool -c pyr-mg70 0.696 -c c-z 0.104 -m h2o-w 0.2 -a 0.1'
                      (only when opac=='optool', and make sure to install optool,
@@ -146,6 +154,7 @@ class coolcalc(object):
         self.khat      = khat
         self.agrain    = agrain
         self.dustmdens = dustmdens
+        self.dgcoupl   = dgcoupl
 
         # Setup the grid
 
@@ -199,6 +208,7 @@ class coolcalc(object):
             assert tmid<150, 'This Bell & Lin opacity powerlaw is only valid for T<150K'
         elif opac=='optool':
             raise ValueError('For now the optool option is not implemented yet.')
+        self.opac    = opac
         self.kapplaw = kapplaw
         self.kap_p   = kap_p
         self.kap_r   = kap_r
@@ -240,8 +250,12 @@ class coolcalc(object):
         dtg         = self.sigmad/self.sigmag
         gamma       = self.gamma
         tmid        = self.tmid
-        Cbar_H      = ((gamma+1)/(gamma-1)) * np.sqrt(kk*tmid/(2*pi*2.3*mp)) \
-                      * kk / (2*2.3*mp)
+        if self.dgcoupl=='default':
+            Cbar_H  = (1/(gamma-1)) * np.sqrt(kk*tmid/(2*pi*2.3*mp)) * kk / (2.3*mp)
+        elif self.dgcoupl=='gombosi':
+            Cbar_H  = ((gamma+1)/(gamma-1)) * np.sqrt(kk*tmid/(2*pi*2.3*mp)) * kk / (2*2.3*mp)
+        else:
+            raise ValueError('Unknown dust-gas coupling calculation method: '+self.dgcoupl)
         srfpermass  = sgr/mgr
         qdg         = Cbar_H * srfpermass * self.rhomidg * tmid # Exchange of heat per gram of dust
         self.t_dustgas = eth_g /qdg / dtg
